@@ -1,4 +1,21 @@
-### Default Node .gitignore
+
+### Project specific .gitignore
+
+# personal notes
+annexes
+
+# redis
+redis/*/*.rdb
+redis/*/stdout
+
+# i18n files
+locales
+
+
+
+
+
+### Default NodeJS .gitignore
 
 # Logs
 logs
@@ -25,13 +42,3 @@ build/Release
 # Deployed apps should consider commenting this line out:
 # see https://npmjs.org/doc/faq.html#Should-I-check-my-node_modules-folder-into-git
 node_modules
-
-
-### Project specific .gitignore
-
-# personal notes
-annexes
-
-# redis
-redis/*/*.rdb
-redis/*/stdout
