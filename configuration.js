@@ -58,7 +58,7 @@ global.mysql = {
     connection: {
         // to create the database from ./models/schema.js: /admin/db/migrate
         // to update it (won't lose existing data): /admin/db/update
-        database: 'database_nodejs',
+        database: 'express4_boilerplate',
 //        database: 'projectdatabase_nodejs',
         username: 'root',
         password: '',
