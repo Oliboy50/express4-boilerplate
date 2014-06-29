@@ -1,0 +1,13 @@
+extends layout
+
+block content
+    h1=__("Log In")
+    form.login(method="post")
+        input(type="hidden", name="_csrf", value="#{csrftoken}")
+        label(for="login")= __("Login")
+        input#login(type="text", name="login", value="")
+        label(for="password")= __("Password")
+        input#password(type="text", name="password", value="")
+        input(type="submit", value=__("Log in"))
+
+    p=message

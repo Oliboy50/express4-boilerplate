@@ -1,0 +1,1 @@
+C:\wamp\bin\redis\redis-server.exe redis.windows.conf

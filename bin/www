@@ -1,0 +1,7 @@
+#!/usr/bin/env node
+
+
+require('../configuration'); // Define global configuration vars
+
+require('../libs/start/beforestart'); // Do some stuffs before starting the web application
+

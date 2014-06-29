@@ -1,0 +1,15 @@
+extends layout
+
+block content
+    h1=__("Sign Up")
+    form.sign-up(method="post")
+        input(type="hidden", name="_csrf", value=csrftoken)
+        label(for="login")= __("Login")
+        input#login(type="text", name="login", value="")
+        label(for="password")= __("Password")
+        input#password(type="text", name="password", value="")
+        label(for="nickname")= __("Nickname")
+        input#nickname(type="text", name="nickname", value="")
+        input(type="submit", value=__("Sign up"))
+
+    p=message
