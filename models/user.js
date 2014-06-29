@@ -16,7 +16,8 @@ module.exports = function(schema) {
         modified: {type: Date, dataType: 'datetime', default: helpers.getDateTime}
     });
 
-    // Validations
+    // Validations 
+    // (Model validation messages will only be set in global.i18n.defaultLanguage locale, you'll have to copy/paste them in other locale files)
     User.validatesPresenceOf('login', 'password', 'nickname');
     User.validatesUniquenessOf('login', {message: i18n.__("This login already exists")});
     User.validatesLengthOf('password', {min: 5, message: {min: i18n.__("This password is too short")}});

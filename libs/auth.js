@@ -7,9 +7,8 @@ var db = require('../models/db');
 
 // Use this to require simple authentication on any route
 exports.userRequired = function(req, res, next) {
-    if (req.isAuthenticated()) {
+    if (req.isAuthenticated())
         return next();
-    }
     res.redirect('/login');
 };
 
@@ -106,11 +105,10 @@ exports.setup = function(app) {
                         {login: login},
                         {nickname: req.body.nickname}
                     ]
-                }},
-            function(err, user) {
+                }}, function(err, user) {
                 if (err)
                     return done(new Error(err));
-                // check to see if theres already a user with that email
+                // check if there's already a user with that email
                 if (user) {
                     if (user.login === login) {
                         req.flash('message', __('This login already exists'));
@@ -124,39 +122,61 @@ exports.setup = function(app) {
                     // there is no user with this login or nickname
                     // hash password & try to save the new user
                     var newUser = new db.User;
-                    newUser.hashPassword(password, function(err, hash) {
-                        if (err)
-                            return done(new Error(err));
-                        newUser.login = login;
-                        newUser.password = hash;
-                        newUser.nickname = req.body.nickname;
-                        // Find user group
-                        db.Group.findOne({where: {authority: 1}}, function(err, userGroup) {
+                    newUser.login = login;
+                    newUser.password = password;
+                    newUser.nickname = req.body.nickname;
+
+                    // Try to validate user before hashing password
+                    newUser.isValid(function(valid) {
+                        if (valid) {
+                            hashAndSave(newUser);
+                        } else {
+                            var message = "";
+                            for (var i in newUser.errors) {
+                                // Get only object own properties -> errors messages
+                                if (newUser.errors.hasOwnProperty(i)) {
+                                    message = newUser.errors[i]; // Get only one error message
+                                    break;
+                                }
+                            }
+                            req.flash('message', message);
+                            return done(null, false);
+                        }
+                    });
+
+                    function hashAndSave(newUser) {
+                        newUser.hashPassword(password, function(err, hash) {
                             if (err)
                                 return done(new Error(err));
-                            if (!userGroup) {
-                                var error = new Error(__("a group with authority=1 must be defined in configuration file"));
-                                error.status = 404;
-                                return done(error);
-                            }
-                            newUser.save(addUserToGroup(newUser, userGroup));
-                        });
-
-                        function addUserToGroup(newUser, userGroup) {
-                            return function(err) {
+                            newUser.password = hash;
+                            // Find user group
+                            db.Group.findOne({where: {authority: 1}}, function(err, userGroup) {
                                 if (err)
                                     return done(new Error(err));
+                                if (!userGroup) {
+                                    var error = new Error(__("a group with authority=1 must be defined in configuration file"));
+                                    error.status = 404;
+                                    return done(error);
+                                }
+                                newUser.save(addUserToGroup(newUser, userGroup));
+                            });
+                        });
+                    }
 
-                                newUser.groups.add(userGroup, function(err) {
-                                    if (err)
-                                        return done(new Error(err));
-                                    else
-                                        return done(null, newUser);
-                                });
-                            };
-                        }
+                    function addUserToGroup(newUser, userGroup) {
+                        return function(err) {
+                            if (err)
+                                return done(new Error(err));
 
-                    });
+                            newUser.groups.add(userGroup, function(err) {
+                                if (err)
+                                    return done(new Error(err));
+                                else
+                                    return done(null, newUser);
+                            });
+                        };
+                    }
+
                 }
             });
         });

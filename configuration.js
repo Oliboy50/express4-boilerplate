@@ -58,7 +58,8 @@ global.mysql = {
     connection: {
         // to create the database from ./models/schema.js: /admin/db/migrate
         // to update it (won't lose existing data): /admin/db/update
-        database: 'coinche_nodejs',
+        database: 'database_nodejs',
+//        database: 'projectdatabase_nodejs',
         username: 'root',
         password: '',
         charset: 'UTF8_GENERAL_CI',
@@ -67,7 +68,7 @@ global.mysql = {
     authentication: {
         // to set first authentication data: /admin/db/migrate  then  /admin/db/set-authentication
         // don't forget to uncomment auth.adminRequired in each route of ./routes/admin-db.js
-        //  after you've set your admin account
+        // after you've set your admin account
         groups: [
             {
                 // => use auth.adminRequired middleware on route to check if logged user is admin

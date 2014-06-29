@@ -1,5 +1,5 @@
 // Init debug
-var debug = require('debug')('coinche');
+var debug = require('debug')('project');
 
 
 
