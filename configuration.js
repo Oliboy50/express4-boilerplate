@@ -56,7 +56,8 @@ global.redis = {
 
 global.mysql = {
     connection: {
-        // to create the database from ./models/schema.js: /admin/db/migrate
+        // to create database/tables from ./models/schema.js: /admin/db/migrate?force=true
+        // to re-create tables (will lose existing data): /admin/db/migrate
         // to update it (won't lose existing data): /admin/db/update
         database: 'express4_boilerplate',
 //        database: 'projectdatabase_nodejs',
@@ -66,7 +67,8 @@ global.mysql = {
         debug: false
     },
     authentication: {
-        // to set first authentication data: /admin/db/migrate  then  /admin/db/set-authentication
+        // to set your admin account:  /admin/db/set-authentication
+        // (must be done after tables were created (i.e. see above))
         // don't forget to uncomment auth.adminRequired in each route of ./routes/admin-db.js
         // after you've set your admin account
         groups: [

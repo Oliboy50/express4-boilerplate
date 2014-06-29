@@ -29,10 +29,14 @@ router.get('/update'/*, auth.adminRequired*/, function(req, res, next) {
 
 // Recreate database from schema.js (means drop existing tables)
 router.get('/migrate'/*, auth.adminRequired*/, function(req, res, next) {
+    if (req.query.force) { // Migration can be forced using /migrate?force=true, that will also create tables if not exists
+        db.schema.automigrate();
+        return res.send(200);
+    }
     db.schema.isActual(function(err, actual) {
         if (err)
             return next(new Error(err));
-        if (actual && !req.query.force) { // Migration can be forced using /migrate?force=true
+        if (actual) {
             var error = new Error(__("Database schema is already up-to-date"));
             error.status = 404;
             return next(error);
